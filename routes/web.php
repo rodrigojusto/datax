@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,4 +26,12 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    // Rotas das
+    Route::get('/demands', App\Livewire\Demand::class)->name('demands');
+    Route::get('/demand/create', App\Livewire\Demand\Create::class)->name('demand.create');
+
+    Route::get('/teste', function (){
+        return view('teste');
+    })->name('teste');
 });
