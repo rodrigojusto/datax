@@ -40,10 +40,10 @@ class UserResource extends Resource
                     ->required()
                     ->maxLength(255),
                 /*Forms\Components\TextInput::make('current_team_id')
-                    ->numeric(),
-                Forms\Components\TextInput::make('profile_photo_path')
-                    ->maxLength(2048),
-                Forms\Components\Textarea::make('two_factor_secret')
+                    ->numeric(),*/
+                Forms\Components\FileUpload::make('profile_photo_path')
+                    ->label('Foto'),
+                /*Forms\Components\Textarea::make('two_factor_secret')
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('two_factor_recovery_codes')
                     ->columnSpanFull(),

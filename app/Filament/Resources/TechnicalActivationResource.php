@@ -18,6 +18,7 @@ class TechnicalActivationResource extends Resource
     protected static ?string $model = TechnicalActivation::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static bool $isDiscovered = false;
     protected static ?string $navigationGroup = 'Operacional';
     protected static ?string $navigationParentItem = 'Demandas Técnicas';
     public static function form(Form $form): Form

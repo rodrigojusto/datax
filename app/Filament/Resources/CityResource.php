@@ -10,13 +10,13 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+//use Illuminate\Database\Eloquent\Builder;
+//use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CityResource extends Resource
 {
     protected static ?string $model = City::class;
-    protected static ?string $navigationParentItem = 'Parametrizações';
+    //protected static ?string $navigationParentItem = 'Parametrizações';
     protected static ?string $navigationGroup = 'Geodados';
     protected static ?string $navigationLabel = 'Cidades';
     protected static ?string $modelLabel = 'Cidade';
