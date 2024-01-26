@@ -17,13 +17,17 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
+    protected static ?string $navigationGroup = 'Parametrizações';
+    protected static ?string $navigationLabel = 'Usuários';
+    protected static ?string $modelLabel = 'Usuário';
+    protected static ?string $pluralModelLabel = 'Usuarios';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Forms\Components\TextInput::make('Nome')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
@@ -35,7 +39,7 @@ class UserResource extends Resource
                     ->password()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('current_team_id')
+                /*Forms\Components\TextInput::make('current_team_id')
                     ->numeric(),
                 Forms\Components\TextInput::make('profile_photo_path')
                     ->maxLength(2048),
@@ -43,7 +47,7 @@ class UserResource extends Resource
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('two_factor_recovery_codes')
                     ->columnSpanFull(),
-                Forms\Components\DateTimePicker::make('two_factor_confirmed_at'),
+                Forms\Components\DateTimePicker::make('two_factor_confirmed_at'),*/
             ]);
     }
 
@@ -56,12 +60,12 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
+                /*Tables\Columns\TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('current_team_id')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable(),*/
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -70,9 +74,9 @@ class UserResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('two_factor_confirmed_at')
+                /*Tables\Columns\TextColumn::make('two_factor_confirmed_at')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable(),*/
             ])
             ->filters([
                 //

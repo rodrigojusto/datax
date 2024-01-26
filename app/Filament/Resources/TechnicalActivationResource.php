@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\TecnicalActivationResource\Pages;
-use App\Filament\Resources\TecnicalActivationResource\RelationManagers;
-use App\Models\TecnicalActivation;
+use App\Filament\Resources\TechnicalActivationResource\Pages;
+use App\Filament\Resources\TechnicalActivationResource\RelationManagers;
+use App\Models\TechnicalActivation;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,12 +13,13 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class TecnicalActivationResource extends Resource
+class TechnicalActivationResource extends Resource
 {
-    protected static ?string $model = TecnicalActivation::class;
+    protected static ?string $model = TechnicalActivation::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationGroup = 'Operacional';
+    protected static ?string $navigationParentItem = 'Demandas Técnicas';
     public static function form(Form $form): Form
     {
         return $form
@@ -56,9 +57,9 @@ class TecnicalActivationResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTecnicalActivations::route('/'),
-            'create' => Pages\CreateTecnicalActivation::route('/create'),
-            'edit' => Pages\EditTecnicalActivation::route('/{record}/edit'),
+            'index' => Pages\ListTechnicalActivations::route('/'),
+            'create' => Pages\CreateTechnicalActivation::route('/create'),
+            'edit' => Pages\EditTechnicalActivation::route('/{record}/edit'),
         ];
     }
 }

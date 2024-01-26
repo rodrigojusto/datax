@@ -21,7 +21,7 @@ class DemandResource extends Resource
     protected static ?string $model = Demand::class;
 
     protected static ?string $navigationGroup = 'Operacional';
-    protected static ?string $navigationLabel = 'Demanda Técnica';
+    protected static ?string $navigationLabel = 'Demandas Técnicas';
     protected static ?string $modelLabel = 'Demanda Técnica';
     protected static ?string $pluralModelLabel = 'Demandas Técnicas';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';

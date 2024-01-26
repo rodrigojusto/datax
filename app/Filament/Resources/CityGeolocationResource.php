@@ -18,7 +18,7 @@ class CityGeolocationResource extends Resource
     protected static ?string $model = CityGeolocation::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationGroup = 'Parametrizações';
     public static function form(Form $form): Form
     {
         return $form

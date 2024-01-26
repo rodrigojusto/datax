@@ -16,10 +16,9 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class StateResource extends Resource
 {
     protected static ?string $model = State::class;
-    protected static ?string $navigationGroup = 'Parametrizações';
+    //protected static ?string $navigationParentItem = 'Parametrizações';
+    protected static ?string $navigationGroup = 'Geodados';
     protected static ?string $navigationLabel = 'Estados';
-    // protected static ?string $navigationGroup
-    // protected static ?string $navigationGroup
     protected static ?string $modelLabel = 'Estado';
     protected static ?string $pluralModelLabel = 'Estados';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';

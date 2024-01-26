@@ -18,7 +18,7 @@ class JustificationResource extends Resource
     protected static ?string $model = Justfication::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationGroup = 'Parametrizações';
     public static function form(Form $form): Form
     {
         return $form
