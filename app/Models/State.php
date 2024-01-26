@@ -11,4 +11,8 @@ class State extends Model
     use HasFactory;
     use HasUuids;
     protected $connection = 'sinos_erp';
+
+    public function cities(){
+        return $this->hasMany(City::class);
+    }
 }

@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\DemandResource\Pages;
 use App\Filament\Resources\DemandResource\RelationManagers;
+use App\Models\State;
+use App\Models\City;
 use App\Models\Demand;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -12,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use phpDocumentor\Reflection\Types\Callable_;
 
 class DemandResource extends Resource
 {
@@ -27,48 +30,58 @@ class DemandResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('contract_type_id_type')
+                Forms\Components\Select::make('service_type_id')
+                    ->label('Serviço')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('contract_type_id_id')
-                    ->required(),
-                Forms\Components\TextInput::make('demand_type_id_type')
+                    ->relationship('service_type', 'id'),
+                Forms\Components\Select::make('contract_type_id')
+                    ->label('Contrato')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('demand_type_id_id')
-                    ->required(),
-                Forms\Components\TextInput::make('service_type_id_type')
+                    ->relationship('contract_type', 'id'),
+                Forms\Components\Select::make('demand_type_id')
+                    ->label('Demanda')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('service_type_id_id')
-                    ->required(),
+                    ->relationship('demand_type','id'),
                 Forms\Components\TextInput::make('designation')
+                    ->label('Designação')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('city_id')
+                Forms\Components\Select::make('state_id')
+                    ->label('Estado')
+                    ->options(State::all()->pluck('name', 'id')-> toArray())
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('base_id_type')
+                    ->reactive()
+                    ->afterStateUpdated(fn(callable $set) => $set('city_id', null)),
+                Forms\Components\Select::make('city_id')
+                    ->label('Cidade')
+                    ->options(function (Callable $get){
+                        $state = State::find($get('state_id'));
+                        if(!$state){
+                            return City::all()->pluck('name', 'id');
+                        }
+                        return $state->cities->pluck('name', 'id');
+                    })
+                    ->searchable(['name'])
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('base_id_id')
-                    ->required(),
-                Forms\Components\DateTimePicker::make('opened_at')
+                    ->reactive(),
+                Forms\Components\Select::make('base_id')
+                    ->label('Base')
+                    ->required()
+                    ->relationship('base', 'id'),
+                Forms\Components\Hidden::make('opened_at')
                     ->required(),
                 Forms\Components\DateTimePicker::make('sinos_activation_at')
                     ->required(),
-                Forms\Components\DateTimePicker::make('closed_at'),
-                Forms\Components\TextInput::make('created_by_type')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('created_by_id')
-                    ->required(),
-                Forms\Components\TextInput::make('closed_by')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('observation')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('justification_id')
-                    ->maxLength(255),
+                Forms\Components\Hidden::make('closed_at'),
+                Forms\Components\Hidden::make('created_by_type'),
+                Forms\Components\Hidden::make('created_by_id'),
+                Forms\Components\Hidden::make('closed_by_type'),
+                Forms\Components\Hidden::make('closed_by'),
+                Forms\Components\Textarea::make('observation')
+                    ->maxLength(255)
+                    ->columnSpan(2),
+                /*Forms\Components\TextInput::make('justification_id')
+                    ->maxLength(255),*/
             ]);
     }
 
