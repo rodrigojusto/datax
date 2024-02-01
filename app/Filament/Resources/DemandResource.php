@@ -154,19 +154,10 @@ class DemandResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListDemands::route('/'),
-            'create' => Pages\CreateDemand::route('/create'),
-            'edit' => Pages\EditDemand::route('/{record}/edit'),
+            'index' => Pages\ManageDemands::route('/'),
         ];
     }
 }
