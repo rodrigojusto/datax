@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\DemandResource\Pages;
 use App\Filament\Resources\DemandResource\RelationManagers;
+use App\Models\DemandType;
 use App\Models\State;
 use App\Models\City;
 use App\Models\Demand;
@@ -30,6 +31,16 @@ class DemandResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Select::make('demand_type_id')
+                    ->label('Demanda')
+                    ->required()
+                    ->relationship('demand_type','name')
+                    ->default(DemandType::query()
+                        ->where('name','=','Suporte')
+                        ->first()
+                        ->pluck('id')
+                    )
+                    ->selectablePlaceholder(false),
                 Forms\Components\Select::make('service_type_id')
                     ->label('Serviço')
                     ->required()
@@ -38,10 +49,6 @@ class DemandResource extends Resource
                     ->label('Contrato')
                     ->required()
                     ->relationship('contract_type', 'id'),
-                Forms\Components\Select::make('demand_type_id')
-                    ->label('Demanda')
-                    ->required()
-                    ->relationship('demand_type','id'),
                 Forms\Components\TextInput::make('designation')
                     ->label('Designação')
                     ->required()
