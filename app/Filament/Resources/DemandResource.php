@@ -44,11 +44,11 @@ class DemandResource extends Resource
                 Forms\Components\Select::make('service_type_id')
                     ->label('Serviço')
                     ->required()
-                    ->relationship('service_type', 'id'),
+                    ->relationship('service_type', 'name'),
                 Forms\Components\Select::make('contract_type_id')
                     ->label('Contrato')
                     ->required()
-                    ->relationship('contract_type', 'id'),
+                    ->relationship('contract_type', 'name'),
                 Forms\Components\TextInput::make('designation')
                     ->label('Designação')
                     ->required()

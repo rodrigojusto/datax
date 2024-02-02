@@ -82,9 +82,7 @@ class BaseResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBases::route('/'),
-            'create' => Pages\CreateBase::route('/create'),
-            'edit' => Pages\EditBase::route('/{record}/edit'),
+            'index' => Pages\ManageBases::route('/'),
         ];
     }
 }

@@ -4,16 +4,16 @@ namespace App\Filament\Resources\ContractTypeResource\Pages;
 
 use App\Filament\Resources\ContractTypeResource;
 use Filament\Actions;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Resources\Pages\ManageRecords;
 
-class EditContractType extends EditRecord
+class ManageContractTypes extends ManageRecords
 {
     protected static string $resource = ContractTypeResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\CreateAction::make(),
         ];
     }
 }

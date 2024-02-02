@@ -4,16 +4,16 @@ namespace App\Filament\Resources\CityResource\Pages;
 
 use App\Filament\Resources\CityResource;
 use Filament\Actions;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Resources\Pages\ManageRecords;
 
-class EditCity extends EditRecord
+class ManageCities extends ManageRecords
 {
     protected static string $resource = CityResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\CreateAction::make(),
         ];
     }
 }

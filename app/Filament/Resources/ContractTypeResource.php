@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ContractTypeResource\Pages;
 use App\Filament\Resources\ContractTypeResource\RelationManagers;
+use App\Models\Client;
 use App\Models\ContractType;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -26,9 +27,12 @@ class ContractTypeResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('client_id')
+                Forms\Components\Select::make('client_id')
+                    ->label('Cliente')
                     ->required()
-                    ->maxLength(255),
+                    ->options(function (){
+                        return Client::all()->pluck('name', 'id');
+                    }),
             ]);
     }
 
@@ -74,9 +78,7 @@ class ContractTypeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListContractTypes::route('/'),
-            'create' => Pages\CreateContractType::route('/create'),
-            'edit' => Pages\EditContractType::route('/{record}/edit'),
+            'index' => Pages\ManageContractTypes::route('/'),
         ];
     }
 }

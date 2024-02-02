@@ -81,9 +81,7 @@ class CityGeolocationResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCityGeolocations::route('/'),
-            'create' => Pages\CreateCityGeolocation::route('/create'),
-            'edit' => Pages\EditCityGeolocation::route('/{record}/edit'),
+            'index' => Pages\ManageCityGeolocations::route('/'),
         ];
     }
 }

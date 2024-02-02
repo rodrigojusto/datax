@@ -4,9 +4,9 @@ namespace App\Filament\Resources\CityGeolocationResource\Pages;
 
 use App\Filament\Resources\CityGeolocationResource;
 use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
+use Filament\Resources\Pages\ManageRecords;
 
-class ListCityGeolocations extends ListRecords
+class ManageCityGeolocations extends ManageRecords
 {
     protected static string $resource = CityGeolocationResource::class;
 
