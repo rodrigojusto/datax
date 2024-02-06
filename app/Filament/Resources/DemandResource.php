@@ -10,6 +10,7 @@ use App\Models\ServiceType;
 use App\Models\State;
 use App\Models\City;
 use App\Models\Demand;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
@@ -19,6 +20,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use phpDocumentor\Reflection\DocBlock\Tags\Author;
 use phpDocumentor\Reflection\Types\Callable_;
 
 class DemandResource extends Resource
@@ -56,18 +58,18 @@ class DemandResource extends Resource
                 }),*/
                 Forms\Components\Select::make('demand_type_id')
                     ->label('Demanda')
-                    ->required()
-                    ->relationship('demand_type','name')
-                    ->default(DemandType::query()
+                    ->options(DemandType::all()->pluck('name', 'id')->toArray())
+                    /*->default(DemandType::query()
                         ->where('name','=','Suporte')
-                        ->first()
-                        ->pluck('id')
-                    )
-                    ->selectablePlaceholder(false),
+                        //->first()
+                        ->pluck('id')->toArray()
+                    )*/
+                    ->selectablePlaceholder(false)
+                    ->required(),
                 Forms\Components\Select::make('contract_type_id')
                     ->label('Contrato')
                     ->reactive()
-                    ->options(ContractType::all()->pluck('name', 'id')-> toArray())
+                    ->options(ContractType::all()->pluck('name', 'id')->toArray())
                     ->afterStateUpdated(fn(callable $set) => $set('service_type_id', null))
                     ->required(),
                 Forms\Components\Select::make('service_type_id')
@@ -90,8 +92,9 @@ class DemandResource extends Resource
                     ->label('Estado')
                     ->required()
                     ->reactive()
-                    ->options(State::all()->pluck('name', 'id')-> toArray())
-                    ->afterStateUpdated(fn(callable $set) => $set('city_id', null)),
+                    ->options(State::all()->pluck('name', 'id')->toArray())
+                    ->afterStateUpdated(fn(callable $set) => $set('city_id', null))
+                    ->dehydrated(false),
                 Forms\Components\Select::make('city_id')
                     ->label('Cidade')
                     ->options(function (Callable $get){
@@ -108,14 +111,11 @@ class DemandResource extends Resource
                     ->label('Base')
                     ->required()
                     ->relationship('base', 'id'),
-                Forms\Components\Hidden::make('opened_at')
-                    ->required(),
                 Forms\Components\DateTimePicker::make('sinos_activation_at')
                     ->required(),
+                Forms\Components\Hidden::make('created_by')
+                    ->default(auth()->id()),
                 Forms\Components\Hidden::make('closed_at'),
-                Forms\Components\Hidden::make('created_by_type'),
-                Forms\Components\Hidden::make('created_by_id'),
-                Forms\Components\Hidden::make('closed_by_type'),
                 Forms\Components\Hidden::make('closed_by'),
                 Forms\Components\Textarea::make('observation')
                     ->maxLength(255)

@@ -11,32 +11,34 @@ class Demand extends Model
     use HasFactory;
     use HasUuids;
 
+    //protected $guarded = ['state_id'];
+
     public function city()
     {
         return $this->belongsTo(City::class);
     }
     public function base()
     {
-        return $this->hasOne(Base::class);
+        return $this->belongsTo(Base::class);
     }
     public function contract_type()
     {
-        return $this->hasOne(ContractType::class);
+        return $this->belongsTo(ContractType::class);
     }
 
     public function demand_type()
     {
-        return $this->hasOne(DemandType::class);
+        return $this->belongsTo(DemandType::class);
     }
 
     public function service_type()
     {
-        return $this->hasOne(ServiceType::class);
+        return $this->belongsTo(ServiceType::class);
     }
 
     public function justification()
     {
-        return $this->hasOne(Justfication::class);
+        return $this->belongsTo(Justfication::class);
     }
 
     public function technical_activation()

@@ -13,15 +13,14 @@ return new class extends Migration
     {
         Schema::create('demands', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuidMorphs('contract_type_id');
-            $table->uuidMorphs('demand_type_id');
-            $table->uuidMorphs('service_type_id');
+            $table->string('contract_type_id');
+            $table->string('demand_type_id');
+            $table->string('service_type_id');
             $table->string('designation');
             $table->string('city_id');
-            $table->uuidMorphs('base_id');
+            $table->string('base_id');
             $table->dateTime('sinos_activation_at');
-            $table->dateTime('opened_at');
-            $table->uuidMorphs('created_by');
+            $table->string('created_by');
             $table->dateTime('closed_at')->nullable();
             $table->string('closed_by')->nullable();
             $table->string('observation')->nullable();
