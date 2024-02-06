@@ -4,7 +4,9 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\DemandResource\Pages;
 use App\Filament\Resources\DemandResource\RelationManagers;
+use App\Models\ContractType;
 use App\Models\DemandType;
+use App\Models\ServiceType;
 use App\Models\State;
 use App\Models\City;
 use App\Models\Demand;
@@ -62,23 +64,33 @@ class DemandResource extends Resource
                         ->pluck('id')
                     )
                     ->selectablePlaceholder(false),
-                Forms\Components\Select::make('service_type_id')
-                    ->label('Serviço')
-                    ->required()
-                    ->relationship('service_type', 'name'),
                 Forms\Components\Select::make('contract_type_id')
                     ->label('Contrato')
-                    ->required()
-                    ->relationship('contract_type', 'name'),
+                    ->reactive()
+                    ->options(ContractType::all()->pluck('name', 'id')-> toArray())
+                    ->afterStateUpdated(fn(callable $set) => $set('service_type_id', null))
+                    ->required(),
+                Forms\Components\Select::make('service_type_id')
+                    ->label('Serviço')
+                    ->reactive()
+                    ->options(function (Callable $get){
+                        $contract_type = ContractType::find($get('contract_type_id'));
+                        if(!$contract_type){
+                            return ServiceType::all()->pluck('name', 'id');
+                            return;
+                        }
+                        return $contract_type->service_types->pluck('name', 'id');
+                    })
+                    ->required(),
                 Forms\Components\TextInput::make('designation')
                     ->label('Designação')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('state_id')
                     ->label('Estado')
-                    ->options(State::all()->pluck('name', 'id')-> toArray())
                     ->required()
                     ->reactive()
+                    ->options(State::all()->pluck('name', 'id')-> toArray())
                     ->afterStateUpdated(fn(callable $set) => $set('city_id', null)),
                 Forms\Components\Select::make('city_id')
                     ->label('Cidade')

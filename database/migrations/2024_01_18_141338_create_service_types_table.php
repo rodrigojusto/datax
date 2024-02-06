@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('service_types', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
-            $table->string('contract_id');
+            $table->uuidMorphs('contract_id');
             $table->timestamps();
         });
     }

@@ -4,16 +4,16 @@ namespace App\Filament\Resources\ServiceTypeResource\Pages;
 
 use App\Filament\Resources\ServiceTypeResource;
 use Filament\Actions;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Resources\Pages\ManageRecords;
 
-class EditServiceType extends EditRecord
+class ManageServiceTypes extends ManageRecords
 {
     protected static string $resource = ServiceTypeResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\CreateAction::make(),
         ];
     }
 }
