@@ -69,9 +69,7 @@ class DemandTypeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListDemandTypes::route('/'),
-            'create' => Pages\CreateDemandType::route('/create'),
-            'edit' => Pages\EditDemandType::route('/{record}/edit'),
+            'index' => Pages\ManageDemandTypes::route('/'),
         ];
     }
 }

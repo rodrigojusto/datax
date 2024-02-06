@@ -10,4 +10,8 @@ class Justfication extends Model
 {
     use HasFactory;
     use HasUuids;
+
+    public function clients(){
+        $this->belongsTo(Client::class);
+    }
 }

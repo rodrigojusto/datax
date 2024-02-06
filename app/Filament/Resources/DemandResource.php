@@ -9,6 +9,8 @@ use App\Models\State;
 use App\Models\City;
 use App\Models\Demand;
 use Filament\Forms;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -31,6 +33,25 @@ class DemandResource extends Resource
     {
         return $form
             ->schema([
+               /* Tabs::make('Tabs')
+                    ->tab({
+                    Tabs\Tab::make('Principal')
+                        ->schema([
+                            //
+                        ]),
+                    Tabs\Tab::make('Acionamento')
+                        ->schema([
+                            //
+                        ]),
+                    Tabs\Tab::make('Detalhes')
+                        ->schema([
+                            //
+                        ]),
+                    Tabs\Tab::make('Fechamento')
+                        ->schema([
+                            //
+                        ]),
+                }),*/
                 Forms\Components\Select::make('demand_type_id')
                     ->label('Demanda')
                     ->required()
@@ -158,6 +179,7 @@ class DemandResource extends Resource
     {
         return [
             'index' => Pages\ManageDemands::route('/'),
+            'export'=> Pages\ManageDemands::route('/export'),
         ];
     }
 }

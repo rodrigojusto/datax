@@ -17,25 +17,30 @@ class Demand extends Model
     }
     public function base()
     {
-        return $this->belongsTo(Base::class);
+        return $this->hasOne(Base::class);
     }
     public function contract_type()
     {
-        return $this->belongsTo(ContractType::class);
+        return $this->hasOne(ContractType::class);
     }
 
     public function demand_type()
     {
-        return $this->belongsTo(DemandType::class);
-    }
-
-    public function justification()
-    {
-        return $this->belongsTo(Justfication::class);
+        return $this->hasOne(DemandType::class);
     }
 
     public function service_type()
     {
-        return $this->belongsTo(ServiceType::class);
+        return $this->hasOne(ServiceType::class);
+    }
+
+    public function justification()
+    {
+        return $this->hasOne(Justfication::class);
+    }
+
+    public function technical_activation()
+    {
+        return $this->hasMany(TechnicalActivation::class);
     }
 }

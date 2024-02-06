@@ -1,33 +1,35 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\DemandResource\RelationManagers;
 
-use App\Filament\Resources\TechnicalActivationResource\Pages;
-use App\Filament\Resources\TechnicalActivationResource\RelationManagers;
 use App\Models\City;
 use App\Models\Team;
-use App\Models\TechnicalActivation;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class TechnicalActivationResource extends Resource
+class TechnicalActivationsRelationManager extends RelationManager
 {
-    protected static ?string $model = TechnicalActivation::class;
+    protected static string $relationship = 'technical_activations';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static bool $isDiscovered = false;
-    protected static ?string $navigationGroup = 'Operacional';
-    protected static ?string $navigationLabel = 'Acionamentos Técnicos';
-    protected static ?string $pluralModelLabel = 'Acionamentos Técnicos';
-    protected static ?string $modelLabel = 'Acionamento Técnico';
-
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
+
+        /*
+         $table->uuid('id')->primary();
+            $table->string('demand_id');
+            $table->string('team_id');
+            $table->string('start_city');
+            $table->string('work_city');
+            $table->string('end_city');
+            $table->string('start_at');
+            $table->string('end_at');
+         */
+
         return $form
             ->schema([
                 Forms\Components\Select::make('team_id')
@@ -40,40 +42,31 @@ class TechnicalActivationResource extends Resource
                     ->options(City::all()->pluck('name', 'id')),
                 Forms\Components\DateTimePicker::make('start_at')->required(),
                 Forms\Components\DateTimePicker::make('end_at'),
+
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
+            ->recordTitleAttribute('Acionamentos')
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('Acionamentos'),
             ])
             ->filters([
                 //
             ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ManageTechnicalActivations::route('/'),
-
-        ];
     }
 }

@@ -62,6 +62,7 @@ class ClientResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\ExportAction::make(),
                     //Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
