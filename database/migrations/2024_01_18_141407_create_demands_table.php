@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('demand_type_id');
             $table->string('service_type_id');
             $table->string('designation');
+            $table->string('state_id');
             $table->string('city_id');
             $table->string('base_id');
             $table->dateTime('sinos_activation_at');

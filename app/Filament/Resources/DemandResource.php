@@ -35,7 +35,7 @@ class DemandResource extends Resource
     protected static ?string $modelLabel = 'Demanda Técnica';
     protected static ?string $pluralModelLabel = 'Demandas Técnicas';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $pollingInterval = '10s';
 
 
 
@@ -99,8 +99,7 @@ class DemandResource extends Resource
                     ->required()
                     ->reactive()
                     ->options(State::all()->pluck('name', 'id')->toArray())
-                    ->afterStateUpdated(fn(callable $set) => $set('city_id', null))
-                    ->dehydrated(false),
+                    ->afterStateUpdated(fn(callable $set) => $set('city_id', null)),
                 Forms\Components\Select::make('city_id')
                     ->label('Cidade')
                     ->options(function (Callable $get){
@@ -135,6 +134,7 @@ class DemandResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->poll('5s')
             ->columns([
                 Tables\Columns\TextColumn::make('demand_type.name')
                     ->label('Demanda')
@@ -193,11 +193,12 @@ class DemandResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->label(''),
+                Tables\Actions\ViewAction::make()->label(''),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    //Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
