@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Observers\DemandUserObserver;
+use http\Client\Request;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +15,7 @@ class Demand extends Model
     use HasUuids;
 
     //protected $guarded = ['state_id'];
+
 
     public function city()
     {
@@ -41,8 +45,14 @@ class Demand extends Model
         return $this->belongsTo(Justfication::class);
     }
 
-    public function technical_activation()
+    public function createdBy()
+    {
+        return $this->hasOne(User::class,'id','created_by');
+    }
+
+    public function technical_activations()
     {
         return $this->hasMany(TechnicalActivation::class);
     }
+
 }

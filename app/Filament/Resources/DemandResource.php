@@ -10,7 +10,9 @@ use App\Models\ServiceType;
 use App\Models\State;
 use App\Models\City;
 use App\Models\Demand;
+use App\Models\User;
 use Carbon\Carbon;
+use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
@@ -22,6 +24,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use phpDocumentor\Reflection\DocBlock\Tags\Author;
 use phpDocumentor\Reflection\Types\Callable_;
+use function Pest\Laravel\get;
 
 class DemandResource extends Resource
 {
@@ -32,6 +35,9 @@ class DemandResource extends Resource
     protected static ?string $modelLabel = 'Demanda Técnica';
     protected static ?string $pluralModelLabel = 'Demandas Técnicas';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+
+
 
     public static function form(Form $form): Form
     {
@@ -113,8 +119,8 @@ class DemandResource extends Resource
                     ->relationship('base', 'id'),
                 Forms\Components\DateTimePicker::make('sinos_activation_at')
                     ->required(),
-                Forms\Components\Hidden::make('created_by')
-                    ->default(auth()->id()),
+                /*Forms\Components\TextInput::make('created_by')
+                    ->default(auth()->id()),*/
                 Forms\Components\Hidden::make('closed_at'),
                 Forms\Components\Hidden::make('closed_by'),
                 Forms\Components\Textarea::make('observation')
@@ -122,6 +128,7 @@ class DemandResource extends Resource
                     ->columnSpan(2),
                 /*Forms\Components\TextInput::make('justification_id')
                     ->maxLength(255),*/
+
             ]);
     }
 
@@ -129,48 +136,56 @@ class DemandResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label('ID'),
-                Tables\Columns\TextColumn::make('contract_type_id_type')
+                Tables\Columns\TextColumn::make('demand_type.name')
+                    ->label('Demanda')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('contract_type_id_id'),
-                Tables\Columns\TextColumn::make('demand_type_id_type')
+                Tables\Columns\TextColumn::make('contract_type.name')
+                    ->label('Contrato')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('demand_type_id_id'),
-                Tables\Columns\TextColumn::make('service_type_id_type')
+                Tables\Columns\TextColumn::make('service_type.name')
+                    ->label('Serviço')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('service_type_id_id'),
                 Tables\Columns\TextColumn::make('designation')
+                    ->label('Desiginação')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('city_id')
+                Tables\Columns\TextColumn::make('city.name')
+                    ->label('Cidade')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('base_id_type')
+                Tables\Columns\TextColumn::make('base.name')
+                    ->label('Base')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('base_id_id'),
-                Tables\Columns\TextColumn::make('opened_at')
-                    ->dateTime()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('sinos_activation_at')
-                    ->dateTime()
+                    ->label('Ac. Sinos')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('closed_at')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_by_type')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_by_id'),
+                    ->label('Dt Fechamento')
+                    ->dateTime('d/m/Y H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                /*Tables\Columns\TextColumn::make('created_by')
+                    ->label('Criado Por')
+                    ->toggleable(isToggledHiddenByDefault: true),*/
                 Tables\Columns\TextColumn::make('closed_by')
-                    ->searchable(),
+                    ->label('Fechado por')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('observation')
-                    ->searchable(),
+                    ->label('Observações')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('justification_id')
-                    ->searchable(),
+                    ->label('Justificativa')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Criado Em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Atualizado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
@@ -187,11 +202,22 @@ class DemandResource extends Resource
             ]);
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\TechnicalActivationsRelationManager::class,
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageDemands::route('/'),
-            'export'=> Pages\ManageDemands::route('/export'),
+            //'index' => Pages\ManageDemands::route('/'),
+            //'export'=> Pages\ManageDemands::route('/export'),
+
+            'index' => Pages\ListDemands::route('/'),
+            'create' => Pages\CreateDemands::route('/create'),
+            'edit' => Pages\EditDemand::route('/{record}/edit'),
         ];
     }
 }

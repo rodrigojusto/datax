@@ -14,7 +14,11 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TechnicalActivationsRelationManager extends RelationManager
 {
+
+    protected static ?string $title = 'Acionamentos Técnicos';
     protected static string $relationship = 'technical_activations';
+    protected static ?string $modelLabel = 'Acionamento Técnico';
+    protected static ?string $pluralModelLabel = 'Acionamentos Técnicos';
 
     public function form(Form $form): Form
     {
@@ -51,7 +55,7 @@ class TechnicalActivationsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('Acionamentos')
             ->columns([
-                Tables\Columns\TextColumn::make('Acionamentos'),
+                Tables\Columns\TextColumn::make('team_id'),
             ])
             ->filters([
                 //
