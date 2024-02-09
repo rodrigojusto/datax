@@ -37,15 +37,22 @@ class TechnicalActivationsRelationManager extends RelationManager
         return $form
             ->schema([
                 Forms\Components\Select::make('team_id')
+                    ->label('Equipe')
+                    ->searchable()
                     ->options(Team::all()->pluck('name', 'id')),
                 Forms\Components\Select::make('start_city')
+                    ->label('Cidade Partida')
                     ->searchable()
                     ->options(City::all()->pluck('name', 'id')),
-                Forms\Components\Select::make('end_city')
+                Forms\Components\Select::make('work_city')
+                    ->label('Cidade Evento')
                     ->searchable()
                     ->options(City::all()->pluck('name', 'id')),
-                Forms\Components\DateTimePicker::make('start_at')->required(),
-                Forms\Components\DateTimePicker::make('end_at'),
+                Forms\Components\DateTimePicker::make('start_at')
+                    ->label('Inicio acionamento')
+                    ->required(),
+                Forms\Components\DateTimePicker::make('end_at')
+                    ->label('Fim Acionamento'),
 
             ]);
     }
@@ -55,13 +62,14 @@ class TechnicalActivationsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('Acionamentos')
             ->columns([
-                Tables\Columns\TextColumn::make('team_id'),
+                Tables\Columns\TextColumn::make('team.name')
+                ->label('Equipe'),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()->icon('heroicon-o-user'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\DemandResource\Pages;
 use App\Filament\Resources\DemandResource\RelationManagers;
+use App\Models\Base;
 use App\Models\ContractType;
 use App\Models\DemandType;
 use App\Models\ServiceType;
@@ -35,8 +36,6 @@ class DemandResource extends Resource
     protected static ?string $modelLabel = 'Demanda Técnica';
     protected static ?string $pluralModelLabel = 'Demandas Técnicas';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $pollingInterval = '10s';
-
 
 
     public static function form(Form $form): Form
@@ -70,7 +69,7 @@ class DemandResource extends Resource
                         //->first()
                         ->pluck('id')->toArray()
                     )*/
-                    ->selectablePlaceholder(false)
+                    ->selectablePlaceholder(true)
                     ->required(),
                 Forms\Components\Select::make('contract_type_id')
                     ->label('Contrato')
@@ -115,14 +114,17 @@ class DemandResource extends Resource
                 Forms\Components\Select::make('base_id')
                     ->label('Base')
                     ->required()
-                    ->relationship('base', 'id'),
+                    ->options(Base::all()->pluck('name', 'id'))
+                    ->relationship('base', 'name'),
                 Forms\Components\DateTimePicker::make('sinos_activation_at')
+                    ->label('Acionamento Sinos')
                     ->required(),
                 /*Forms\Components\TextInput::make('created_by')
                     ->default(auth()->id()),*/
                 Forms\Components\Hidden::make('closed_at'),
                 Forms\Components\Hidden::make('closed_by'),
                 Forms\Components\Textarea::make('observation')
+                    ->label('Observações de Abertura')
                     ->maxLength(255)
                     ->columnSpan(2),
                 /*Forms\Components\TextInput::make('justification_id')

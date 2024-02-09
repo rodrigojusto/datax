@@ -10,4 +10,12 @@ class TechnicalActivation extends Model
 {
     use HasFactory;
     use HasUuids;
+
+    public function demand(){
+        return $this->belongsTo(Demand::class);
+    }
+
+    public function team(){
+        return $this->belongsTo(Team::class);
+    }
 }
