@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('team_id');
             $table->string('start_city');
             $table->string('work_city');
-            $table->string('end_city');
             $table->string('start_at');
             $table->string('end_at');
             $table->timestamps();
