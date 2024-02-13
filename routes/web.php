@@ -13,11 +13,12 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-/*
+
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/datax');
 });
 
+/*
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
