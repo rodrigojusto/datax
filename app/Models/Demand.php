@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Observers\DemandUserObserver;
-use http\Client\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -55,4 +54,13 @@ class Demand extends Model
         return $this->hasMany(TechnicalActivation::class);
     }
 
+    public function demand_observations()
+    {
+        return $this->hasMany(DemandObservation::class);
+    }
+
+    public function demand_images()
+    {
+        return $this->hasMany(DemandImages::class);
+    }
 }

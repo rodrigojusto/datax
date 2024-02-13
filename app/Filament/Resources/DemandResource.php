@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\DemandResource\Pages;
 use App\Filament\Resources\DemandResource\RelationManagers;
+use App\Models\Base;
 use App\Models\ContractType;
 use App\Models\DemandType;
 use App\Models\ServiceType;
@@ -17,6 +18,7 @@ use Filament\Forms;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Form;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -35,98 +37,101 @@ class DemandResource extends Resource
     protected static ?string $modelLabel = 'Demanda Técnica';
     protected static ?string $pluralModelLabel = 'Demandas Técnicas';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $pollingInterval = '10s';
-
 
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-               /* Tabs::make('Tabs')
-                    ->tab({
-                    Tabs\Tab::make('Principal')
+            Tabs::make()
+                ->columnSpanFull()
+                ->tabs([
+                    Tabs\Tab::make('Informações do Evento')
+                    ->columns(5)
+                    ->schema([
+                        Forms\Components\Fieldset::make('Classificação da Demanda')
+                            ->columns(3)
+                            ->schema([
+                                Forms\Components\Select::make('demand_type_id')
+                                    ->label('Tipo de Demanda')
+                                    ->options(DemandType::all()->pluck('name', 'id')->toArray())
+                                    /*->default(DemandType::query()
+                                        ->where('name','=','Suporte')
+                                        //->first()
+                                        ->pluck('id')->toArray()
+                                    )*/
+                                    ->required(),
+                                Forms\Components\Select::make('contract_type_id')
+                                    ->label('Contrato')
+                                    ->reactive()
+                                    ->options(ContractType::all()->pluck('name', 'id')->toArray())
+                                    ->afterStateUpdated(fn(callable $set) => $set('service_type_id', null))
+                                    ->required(),
+                                Forms\Components\Select::make('service_type_id')
+                                    ->label('Serviço')
+                                    ->reactive()
+                                    ->options(function (Callable $get){
+                                        $contract_type = ContractType::find($get('contract_type_id'));
+                                        if(!$contract_type){
+                                            return ServiceType::all()->pluck('name', 'id');
+                                        }
+                                        return $contract_type->service_types->pluck('name', 'id');
+                                    })
+                                    ->required(),
+                            ]),
+
+                        Forms\Components\Fieldset::make('Informações da Demanda')
+                            ->columns(5)
+                            ->schema([
+                                Forms\Components\TextInput::make('designation')
+                                    ->columnSpanFull()
+                                    ->label('Designação')
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\Select::make('state_id')
+                                    ->label('Estado')
+                                    ->required()
+                                    ->reactive()
+                                    ->options(State::all()->pluck('name', 'id')->toArray())
+                                    ->afterStateUpdated(fn(callable $set) => $set('city_id', null)),
+                                Forms\Components\Select::make('city_id')
+                                    ->columnSpan(2)
+                                    ->label('Cidade')
+                                    ->options(function (Callable $get){
+                                        $state = State::find($get('state_id'));
+                                        if(!$state){
+                                            return City::all()->pluck('name', 'id');
+                                        }
+                                        return $state->cities->pluck('name', 'id');
+                                    })
+                                    ->searchable(['name'])
+                                    ->required()
+                                    ->reactive(),
+                                Forms\Components\Select::make('base_id')
+                                    ->relationship('base', 'name')
+                                    ->label('Base')
+                                    ->searchable(['name'])
+                                    ->required(),
+                                Forms\Components\DateTimePicker::make('sinos_activation_at')
+                                    ->required(),
+                                /*Forms\Components\TextInput::make('created_by')
+                                    ->default(auth()->id()),*/
+                                Forms\Components\Hidden::make('closed_at'),
+                                Forms\Components\Hidden::make('closed_by'),
+                                /*Forms\Components\TextInput::make('justification_id')
+                                    ->maxLength(255),*/
+                            ]),
+                    ]),
+
+                    Tabs\Tab::make('Observação')
                         ->schema([
-                            //
-                        ]),
-                    Tabs\Tab::make('Acionamento')
-                        ->schema([
-                            //
-                        ]),
-                    Tabs\Tab::make('Detalhes')
-                        ->schema([
-                            //
-                        ]),
-                    Tabs\Tab::make('Fechamento')
-                        ->schema([
-                            //
-                        ]),
-                }),*/
-                Forms\Components\Select::make('demand_type_id')
-                    ->label('Demanda')
-                    ->options(DemandType::all()->pluck('name', 'id')->toArray())
-                    /*->default(DemandType::query()
-                        ->where('name','=','Suporte')
-                        //->first()
-                        ->pluck('id')->toArray()
-                    )*/
-                    ->selectablePlaceholder(false)
-                    ->required(),
-                Forms\Components\Select::make('contract_type_id')
-                    ->label('Contrato')
-                    ->reactive()
-                    ->options(ContractType::all()->pluck('name', 'id')->toArray())
-                    ->afterStateUpdated(fn(callable $set) => $set('service_type_id', null))
-                    ->required(),
-                Forms\Components\Select::make('service_type_id')
-                    ->label('Serviço')
-                    ->reactive()
-                    ->options(function (Callable $get){
-                        $contract_type = ContractType::find($get('contract_type_id'));
-                        if(!$contract_type){
-                            return ServiceType::all()->pluck('name', 'id');
-                            return;
-                        }
-                        return $contract_type->service_types->pluck('name', 'id');
-                    })
-                    ->required(),
-                Forms\Components\TextInput::make('designation')
-                    ->label('Designação')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Select::make('state_id')
-                    ->label('Estado')
-                    ->required()
-                    ->reactive()
-                    ->options(State::all()->pluck('name', 'id')->toArray())
-                    ->afterStateUpdated(fn(callable $set) => $set('city_id', null)),
-                Forms\Components\Select::make('city_id')
-                    ->label('Cidade')
-                    ->options(function (Callable $get){
-                        $state = State::find($get('state_id'));
-                        if(!$state){
-                            return City::all()->pluck('name', 'id');
-                        }
-                        return $state->cities->pluck('name', 'id');
-                    })
-                    ->searchable(['name'])
-                    ->required()
-                    ->reactive(),
-                Forms\Components\Select::make('base_id')
-                    ->label('Base')
-                    ->required()
-                    ->relationship('base', 'id'),
-                Forms\Components\DateTimePicker::make('sinos_activation_at')
-                    ->required(),
-                /*Forms\Components\TextInput::make('created_by')
-                    ->default(auth()->id()),*/
-                Forms\Components\Hidden::make('closed_at'),
-                Forms\Components\Hidden::make('closed_by'),
-                Forms\Components\Textarea::make('observation')
-                    ->maxLength(255)
-                    ->columnSpan(2),
-                /*Forms\Components\TextInput::make('justification_id')
-                    ->maxLength(255),*/
+                            Forms\Components\Textarea::make('observation')
+                                ->hiddenLabel(true)
+                                ->maxLength(255)
+                                ->columnSpan(2),
+                    ]),
+
+                ]),
 
             ]);
     }
@@ -146,7 +151,7 @@ class DemandResource extends Resource
                     ->label('Serviço')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('designation')
-                    ->label('Desiginação')
+                    ->label('Designação')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('city.name')
                     ->label('Cidade')
@@ -207,6 +212,8 @@ class DemandResource extends Resource
     {
         return [
             RelationManagers\TechnicalActivationsRelationManager::class,
+            RelationManagers\DemandObservationsRelationManager::class,
+            RelationManagers\DemandImagesRelationManager::class,
         ];
     }
 
@@ -220,5 +227,9 @@ class DemandResource extends Resource
             'create' => Pages\CreateDemands::route('/create'),
             'edit' => Pages\EditDemand::route('/{record}/edit'),
         ];
+    }
+    public static function getNavigationBadge(): ?string
+    {
+        return self::getModel()::query()->where('closed_at', null)->count();// ::whereNull('closed_at')
     }
 }
