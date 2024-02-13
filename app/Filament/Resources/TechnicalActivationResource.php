@@ -28,14 +28,28 @@ class TechnicalActivationResource extends Resource
 
     public static function form(Form $form): Form
     {
+
+        /*
+        demand_id
+        team_id
+        start_city
+        work_city
+        end_city
+        start_at
+        end_at
+         */
         return $form
             ->schema([
                 Forms\Components\Select::make('team_id')
+                    ->label('Equipe')
+                    ->searchable()
                     ->options(Team::all()->pluck('name', 'id')),
                 Forms\Components\Select::make('start_city')
+                    ->label('Cidade Partida')
                     ->searchable()
                     ->options(City::all()->pluck('name', 'id')),
-                Forms\Components\Select::make('end_city')
+                Forms\Components\Select::make('work_city')
+                    ->label('Cidade Evento')
                     ->searchable()
                     ->options(City::all()->pluck('name', 'id')),
                 Forms\Components\DateTimePicker::make('start_at')->required(),

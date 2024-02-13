@@ -23,29 +23,39 @@ class TechnicalActivationsRelationManager extends RelationManager
     public function form(Form $form): Form
     {
 
-        /*
-         $table->uuid('id')->primary();
-            $table->string('demand_id');
-            $table->string('team_id');
-            $table->string('start_city');
-            $table->string('work_city');
-            $table->string('end_city');
-            $table->string('start_at');
-            $table->string('end_at');
-         */
-
         return $form
             ->schema([
                 Forms\Components\Select::make('team_id')
-                    ->options(Team::all()->pluck('name', 'id')),
+                    ->label('Equipe')
+                    ->searchable()
+                    ->options(Team::all()->pluck('name', 'id'))
+                    ->live(),
+                /*Forms\Components\Hidden::make('start_city')
+                    ->options(function (Callable $get){
+                        $state = State::find($get('team_id'));
+                        if(!$state){
+                            // Obter atravéz do team_base a cidade de partida do evento
+                            return City::all()->pluck('name', 'id');
+                        }
+
+                        return $state->cities->pluck('name', 'id');
+                    })
+                ,*/
+
                 Forms\Components\Select::make('start_city')
+                    ->relationship()
+                    ->label('Cidade Partida')
                     ->searchable()
                     ->options(City::all()->pluck('name', 'id')),
-                Forms\Components\Select::make('end_city')
+                Forms\Components\Select::make('work_city')
+                    ->label('Cidade Evento')
                     ->searchable()
                     ->options(City::all()->pluck('name', 'id')),
-                Forms\Components\DateTimePicker::make('start_at')->required(),
-                Forms\Components\DateTimePicker::make('end_at'),
+                Forms\Components\DateTimePicker::make('start_at')
+                    ->label('Inicio acionamento')
+                    ->required(),
+                Forms\Components\DateTimePicker::make('end_at')
+                    ->label('Fim Acionamento'),
 
             ]);
     }
@@ -55,13 +65,14 @@ class TechnicalActivationsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('Acionamentos')
             ->columns([
-                Tables\Columns\TextColumn::make('team_id'),
+                Tables\Columns\TextColumn::make('team.name')
+                ->label('Equipe'),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()->icon('heroicon-o-user'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
