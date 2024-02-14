@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\TeamResource\Pages;
 use App\Filament\Resources\TeamResource\RelationManagers;
 use App\Models\Team;
+use Cassandra\Rows;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,6 +13,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use OpenSpout\Common\Entity\Row;
+use PHPUnit\Metadata\Group;
 
 class TeamResource extends Resource
 {
@@ -39,12 +42,21 @@ class TeamResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label('ID'),
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable('asc'),
                 Tables\Columns\IconColumn::make('isInternal')
+                    ->label('Interno')
                     ->boolean(),
+                Tables\Columns\TextColumn::make('teamTypes')
+                    ->label('Tipos')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('answerable')
+                    ->label('Responsável')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('cnpj')
+                    ->label('CNPJ')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -53,12 +65,6 @@ class TeamResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('teamTypes')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('answerable')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('cnpj')
-                    ->searchable(),
             ])
             ->filters([
                 //

@@ -19,6 +19,9 @@ class ContractTypeResource extends Resource
     protected static ?string $model = ContractType::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'Tipos de Contratos';
+    protected static ?string $modelLabel = 'Tipo de Contrato';
+    protected static ?string $pluralModelLabel = 'Tipos de Contratos';
     protected static ?string $navigationGroup = 'Parametrizações';
     public static function form(Form $form): Form
     {
@@ -40,11 +43,11 @@ class ContractTypeResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label('ID'),
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Tipo de Contrato')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('client_id')
+                Tables\Columns\TextColumn::make('client.name')
+                    ->label('Nome do Cliente')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

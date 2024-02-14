@@ -24,6 +24,7 @@ class BaseResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Nome')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('city_id')
@@ -39,15 +40,13 @@ class BaseResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label('ID'),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nome')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('city_id')
+                Tables\Columns\TextColumn::make('city.name')
                     ->label('Cidade')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('client_id')
+                Tables\Columns\TextColumn::make('client.name')
                     ->label('Cliente')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')

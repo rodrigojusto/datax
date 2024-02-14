@@ -10,4 +10,11 @@ class Base extends Model
 {
     use HasFactory;
     use HasUuids;
+
+    public function city(){
+        return $this->belongsTo(City::class);
+    }
+    public function client(){
+        return $this->belongsTo(Client::class);
+    }
 }

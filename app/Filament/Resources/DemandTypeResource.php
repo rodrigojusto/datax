@@ -19,6 +19,9 @@ class DemandTypeResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Parametrizações';
+    protected static ?string $navigationLabel = 'Tipos de Demandas';
+    protected static ?string $modelLabel = 'Tipo de Demanda';
+    protected static ?string $pluralModelLabel = 'Tipos de Demandas';
     public static function form(Form $form): Form
     {
         return $form
@@ -33,18 +36,17 @@ class DemandTypeResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label('ID'),
                 Tables\Columns\TextColumn::make('name')
+                    ->label('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: false),
             ])
             ->filters([
                 //

@@ -11,7 +11,7 @@ class ServiceType extends Model
     use HasFactory;
     use HasUuids;
 
-    public function contract_type(){
+    public function contract(){
         return $this->belongsTo(ContractType::class);
     }
 }

@@ -16,8 +16,7 @@ trait OpenAndClosed
         return [
             'all' => Tab::make('Todos')
                 ->icon('heroicon-o-bars-4')
-                ->badge($total)
-        ,
+                ->badge($total),
             'active' => Tab::make('Abertos')
                 ->icon('heroicon-o-lock-open')
                 ->badge($active)
